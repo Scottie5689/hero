@@ -1,0 +1,33 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-create-block-hero {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.hero {
+	&__controls {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	&__laptop {
+		width: 100%;
+	}
+
+	&__text {
+		max-width: 50%;
+	}
+
+	&__vector {
+		width: 55px;
+	}
+}
+
