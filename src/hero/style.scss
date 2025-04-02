@@ -12,6 +12,20 @@
 }
 
 .hero {
+	&__spin-icon,
+	&__pause {
+		width: 50px;
+		height: 50px;
+		display: block;
+		bottom: 0;
+		left: 0;
+		position: absolute;
+	}
+
+	&__pause {
+		left: 50px;
+	}
+
 	&__controls {
 		display: flex;
 		justify-content: space-between;
@@ -20,6 +34,7 @@
 
 	&__laptop {
 		width: 100%;
+		position: relative;
 	}
 
 	&__text {

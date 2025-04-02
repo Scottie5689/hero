@@ -21,21 +21,19 @@
  */
 
 /* eslint-disable no-console */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export default function View() {
-  const [isSpinning, setIsSpinning] = useState(true); // Control rotation state
-  const isSpinningRef = useRef(isSpinning); // Store ref to track rotation state
-  const modelRef = useRef(null); // Keep track of model
+  const modelRef = useRef(null); // Store model reference
+  const cameraRef = useRef(null); // Store camera reference
 
   useEffect(() => {
     const container = document.getElementById('laptop-container');
     if (!container) return;
 
-    // Ensure container has a size
     container.style.width = '100%';
     container.style.height = '600px';
     container.style.position = 'relative';
@@ -43,6 +41,7 @@ export default function View() {
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    cameraRef.current = camera; // Store camera reference
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
@@ -58,7 +57,7 @@ export default function View() {
       model.position.set(0, 0, 0);
       model.scale.set(1.8, 1.8, 1.8);
       scene.add(model);
-      modelRef.current = model; // Store reference to model
+      modelRef.current = model; // Store model reference
     }, undefined, (error) => {
       console.error('Error loading GLTF model:', error);
     });
@@ -73,16 +72,10 @@ export default function View() {
     controls.enableZoom = false;
     controls.screenSpacePanning = false;
 
-    // Animation loop
+    // Animation loop (without spinning)
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
-
-      // Rotate model only if isSpinningRef is true
-      if (modelRef.current && isSpinningRef.current) {
-        modelRef.current.rotation.y += 0.01;
-      }
-
       renderer.render(scene, camera);
     };
     animate();
@@ -100,33 +93,23 @@ export default function View() {
       container.removeChild(renderer.domElement);
       window.removeEventListener('resize', handleResize);
     };
-  }, []); // Runs only once on mount
+  }, []); // Only runs once on mount
 
-  // Toggle function to pause/resume rotation
-  const toggleSpin = () => {
-    setIsSpinning((prev) => {
-      isSpinningRef.current = !prev; // Update ref immediately
-      return !prev;
-    });
+  // Function to rotate model to specific viewpoints
+  const setViewpoint = (position) => {
+    if (modelRef.current) {
+      modelRef.current.rotation.set(position.x, position.y, position.z);
+    }
   };
 
   return (
     <>
+      <img className="hero__spin-icon" src="/wp-content/uploads/360-vector-2.svg" alt="360 icon" />
       <div id="laptop-container"></div>
-      <div class="hero__controls">
-        <button 
-          onClick={toggleSpin} 
-          style={{
-            display: 'block',
-            margin: '10px auto',
-            padding: '10px 20px',
-            fontSize: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          {isSpinning ? 'Pause' : 'Resume'}
-        </button>
-        <img class="hero__vector" src="/wp-content/uploads/360-vector-2.svg"/>
+      <div className="hero__controls" style={{ textAlign: 'center', marginTop: '10px' }}>
+        <button onClick={() => setViewpoint({ x: 0, y: 0, z: 0 })}>Front View</button>
+        <button onClick={() => setViewpoint({ x: 0, y: Math.PI / 2, z: 0 })}>Side View</button>
+        <button onClick={() => setViewpoint({ x: -Math.PI / 4, y: Math.PI / 4, z: 0 })}>Top View</button>
       </div>
     </>
   );

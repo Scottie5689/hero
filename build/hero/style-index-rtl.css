@@ -13,6 +13,17 @@
   align-items: center;
 }
 
+.hero__spin-icon, .hero__pause {
+  width: 50px;
+  height: 50px;
+  display: block;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+.hero__pause {
+  right: 50px;
+}
 .hero__controls {
   display: flex;
   justify-content: space-between;
@@ -20,6 +31,7 @@
 }
 .hero__laptop {
   width: 100%;
+  position: relative;
 }
 .hero__text {
   max-width: 50%;

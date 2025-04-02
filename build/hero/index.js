@@ -172,10 +172,19 @@ function save() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save(),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      class: "hero__text",
+      className: "hero__text",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
-        class: "wp-block-heading",
+        className: "wp-block-heading",
         children: "Welcome"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
+        className: "herp__title-1",
+        children: "Marketing"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
+        className: "herp__title-2",
+        children: "Design"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
+        className: "herp__title-2",
+        children: "Development"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
         children: "Welcome to my portfolio. I am Scott Vosburgh, a creative marketer specializing in technology and design. My current role is Marketing Director for Sierra-Olympia Technologies where I develop the web experience, content and help craft all levels of the customer funnel. My skills have helped me work with or lead digital teams and marketing campaigns with different agencies and in house marketing groups. I hold a BFA in Graphic Design from Columbia College Chicago."
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {

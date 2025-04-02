@@ -84606,15 +84606,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function View() {
-  const [isSpinning, setIsSpinning] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true); // Control rotation state
-  const isSpinningRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(isSpinning); // Store ref to track rotation state
-  const modelRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Keep track of model
+  const modelRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Store model reference
+  const cameraRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Store camera reference
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const container = document.getElementById('laptop-container');
     if (!container) return;
-
-    // Ensure container has a size
     container.style.width = '100%';
     container.style.height = '600px';
     container.style.position = 'relative';
@@ -84622,6 +84619,7 @@ function View() {
     // Scene setup
     const scene = new three__WEBPACK_IMPORTED_MODULE_1__.Scene();
     const camera = new three__WEBPACK_IMPORTED_MODULE_1__.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    cameraRef.current = camera; // Store camera reference
     const renderer = new three__WEBPACK_IMPORTED_MODULE_2__.WebGLRenderer({
       alpha: true,
       antialias: true
@@ -84640,7 +84638,7 @@ function View() {
       model.position.set(0, 0, 0);
       model.scale.set(1.8, 1.8, 1.8);
       scene.add(model);
-      modelRef.current = model; // Store reference to model
+      modelRef.current = model; // Store model reference
     }, undefined, error => {
       console.error('Error loading GLTF model:', error);
     });
@@ -84655,15 +84653,10 @@ function View() {
     controls.enableZoom = false;
     controls.screenSpacePanning = false;
 
-    // Animation loop
+    // Animation loop (without spinning)
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
-
-      // Rotate model only if isSpinningRef is true
-      if (modelRef.current && isSpinningRef.current) {
-        modelRef.current.rotation.y += 0.01;
-      }
       renderer.render(scene, camera);
     };
     animate();
@@ -84681,33 +84674,48 @@ function View() {
       container.removeChild(renderer.domElement);
       window.removeEventListener('resize', handleResize);
     };
-  }, []); // Runs only once on mount
+  }, []); // Only runs once on mount
 
-  // Toggle function to pause/resume rotation
-  const toggleSpin = () => {
-    setIsSpinning(prev => {
-      isSpinningRef.current = !prev; // Update ref immediately
-      return !prev;
-    });
+  // Function to rotate model to specific viewpoints
+  const setViewpoint = position => {
+    if (modelRef.current) {
+      modelRef.current.rotation.set(position.x, position.y, position.z);
+    }
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+      className: "hero__spin-icon",
+      src: "/wp-content/uploads/360-vector-2.svg",
+      alt: "360 icon"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       id: "laptop-container"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-      class: "hero__controls",
+      className: "hero__controls",
+      style: {
+        textAlign: 'center',
+        marginTop: '10px'
+      },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-        onClick: toggleSpin,
-        style: {
-          display: 'block',
-          margin: '10px auto',
-          padding: '10px 20px',
-          fontSize: '16px',
-          cursor: 'pointer'
-        },
-        children: isSpinning ? 'Pause' : 'Resume'
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
-        class: "hero__vector",
-        src: "/wp-content/uploads/360-vector-2.svg"
+        onClick: () => setViewpoint({
+          x: 0,
+          y: 0,
+          z: 0
+        }),
+        children: "Front View"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        onClick: () => setViewpoint({
+          x: 0,
+          y: Math.PI / 2,
+          z: 0
+        }),
+        children: "Side View"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        onClick: () => setViewpoint({
+          x: -Math.PI / 4,
+          y: Math.PI / 4,
+          z: 0
+        }),
+        children: "Top View"
       })]
     })]
   });
